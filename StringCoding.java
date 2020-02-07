@@ -3,10 +3,14 @@ public class StringCoding {
 
 	public static void main(String[] args) {
 	
-		String pa = "(()())";
-		System.out.println(isValidRec(pa));
-		
-		
+		String a = "hello";
+		String b = "ll";
+		String sub = a.substring(2,4);
+		System.out.println(a);
+		System.out.println(sub);
+		System.out.println(sub.length());
+		System.out.println(a.substring(2,4) == b);
+		System.out.println(sub == b);
 		
 	}
 	/*Given a string containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.
@@ -36,9 +40,7 @@ public class StringCoding {
                 }   
             }
         }
-        if(!stack.isEmpty())
-            return false;
-        return true;
+        return stack.isEmpty();
     }
 	//only checks "()"
 	public static boolean isValidLoop(String s) {
