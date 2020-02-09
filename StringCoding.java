@@ -326,4 +326,111 @@ public class StringCoding {
 	             return true;
 	         return false;
 	     }
+	     
+	     public static String reverseVowelsOp(String s) {
+	         char[] result = s.toCharArray();
+	          for(int i = 0, k = s.length()-1; i <= k;){
+	              char left = result[i];
+	              char right = result[k];
+	              if(isVowelOp(left) && isVowelOp(right)){
+	                  result[i] = s.charAt(k);
+	                  result[k] = s.charAt(i);
+	                  i ++;
+	                  k --;
+	              }
+	              if(!isVowelOp(left))
+	                  i++;
+	              if(!isVowelOp(right))
+	                  k--;
+	          }
+	          return (new String(result));
+	      }
+	      public static boolean isVowelOp(char a){
+	          char c = Character.toLowerCase(a);       
+	          return(c == 'a' || c == 'i' || c == 'o' 
+	            || c == 'u' || c == 'e');
+	      }
+	      /*Given a word, you need to judge whether the usage of capitals in it is right or not.
+		We define the usage of capitals in a word to be right when one of the following cases holds:
+		All letters in this word are capitals, like "USA".
+		All letters in this word are not capitals, like "leetcode".
+		Only the first letter in this word is capital, like "Google".
+		Otherwise, we define that this word doesn't use capitals in a right way.*/
+	      
+	      public static boolean detectCapitalUse(String word) {
+	          boolean hasCap = Character.isUpperCase(word.charAt(0)); 
+	          int count = 0;
+	          for(int i = 1; i < word.length(); i ++){
+	              char c = word.charAt(i);
+	              if(Character.isUpperCase(c))
+	                  count ++;
+	          }
+	          return hasCap && (count == word.length()-1 || count == 0) || !hasCap && count == 0;
+	      }
+	      
+	      public boolean detectCapitalUseOpt(String word) {
+	          int count = 0;
+	           for(char c : word.toCharArray()){
+	               if(Character.isUpperCase(c)) count ++;
+	           }
+	           if(count == 1) return Character.isUpperCase(word.charAt(0));
+	           return count == 0 || count == word.length();
+	       }
+	      /*Given a string, find the first non-repeating character in it and return it's index. 
+	       * If it doesn't exist, return -1.
+		Examples:
+		s = "leetcode"
+		return 0.
+		s = "loveleetcode",
+		return 2.*/
+	      
+	      public static int firstUniqChar(String s) {
+	          if(s.isEmpty() || s.isBlank())
+	              return -1;
+	          var map = new HashMap<Character,Integer>();
+	          if(s.length() == 1)
+	              return 0;
+	          for(int i = 0; i < s.length()-1; i ++){
+	              if(!map.containsKey(s.charAt(i))){
+	                  int index = s.indexOf(s.charAt(i)+"",i+1);
+	                  if(index == -1)
+	                      return i;
+	                  map.put(s.charAt(i),0);
+	              }
+	          }
+	          if(!map.containsKey(s.charAt(s.length()-1)))
+	              return s.length()-1;
+	          return -1;
+	      }
+	      /*Given two non-negative integers num1 and num2 represented as string, return 
+	       * the sum of num1 and num2.
+		Note:
+		The length of both num1 and num2 is < 5100.
+		Both num1 and num2 contains only digits 0-9.
+		Both num1 and num2 does not contain any leading zero.
+		You must not use any built-in BigInteger library or convert the inputs to integer directly.*/
+	      public static String addStrings(String num1, String num2) {
+	          int carry = 0;
+	          int i = num1.length()-1;
+	          int j = num2.length()-1;
+	          String result = "";
+	          while(i >= 0 && j >= 0){
+	               int sum = Integer.parseInt(num1.charAt(i--)+"") + Integer.parseInt(num2.charAt(j--)+"") + carry;
+	               carry = sum/10;
+	               result = sum%10 + result;
+	          }
+	          while(i >= 0){
+	              int sum = Integer.parseInt(num1.charAt(i--)+"") + carry;
+	              result = sum%10 + result;
+	              carry = sum/10;
+	          }
+	          while(j >= 0){
+	              int sum = Integer.parseInt(num2.charAt(j--)+"") + carry;
+	              result = sum%10 + result;
+	              carry = sum/10;
+	          }
+	          if(carry == 1)
+	              result = "1" + result;
+	          return result;
+	      }
 }
