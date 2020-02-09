@@ -2,9 +2,12 @@ import java.util.*;
 public class StringCoding {
 
 	public static void main(String[] args) {
-		char a = '3';
-		int b = a - '0';
-		System.out.println(b);
+		String a = ", , , ,        a, eaefa";
+		//System.out.println(a.length());
+		
+		String b = a.trim();
+		int l = b.split("\\s+").length;
+		System.out.println(l);
 		
 	}
 	public static void count(int n) {
@@ -429,5 +432,63 @@ public class StringCoding {
 	          if(carry == 1)
 	              result = "1" + result;
 	          return result;
+	      }
+	      
+	      public static String addStringsOpt(String num1, String num2) {
+	          StringBuilder result = new StringBuilder();
+	          int carry = 0;
+	          int i = num1.length()-1;
+	          int j = num2.length()-1;
+	          while(i >= 0 && j >= 0){
+	              int sum = num1.charAt(i--) - '0' + num2.charAt(j--) - '0' + carry;
+	              result.insert(0,sum%10);
+	              carry = sum/10;
+	          }
+	          while(i >= 0){
+	              int sum = num1.charAt(i--) - '0' + carry;
+	              result.insert(0,sum%10);
+	              carry = sum/10;
+	          }
+	          while(j >= 0){
+	              int sum = num2.charAt(j--) - '0' + carry;
+	              result.insert(0,sum%10);
+	              carry = sum/10;
+	          }
+	          if(carry == 1)
+	              result.insert(0,1);
+	          return result.toString();
+	      }
+	      
+	      public static String addStringsOpt1(String num1, String num2) {
+	          StringBuilder result = new StringBuilder();
+	          int i = num1.length()-1, j = num2.length()-1, carry = 0, digt1 = 0, digt2 = 0;
+	          while(i >= 0 || j >= 0){
+	              digt1 = i >= 0 ? num1.charAt(i--) - '0' : 0;
+	              digt2 = j >= 0 ? num2.charAt(j--) - '0' : 0;
+	              int sum = digt1 + digt2 + carry;
+	              result.insert(0,sum%10);
+	              carry = sum/10;
+	          }
+	          if(carry == 1)
+	              result.insert(0,1);
+	          return result.toString();
+	      }
+	      /*Count the number of segments in a string, where a segment is defined to 
+	       * be a contiguous sequence of non-space characters.
+		Please note that the string does not contain any non-printable characters.
+		Example:
+		Input: "Hello, my name is John"
+		Output: 5*/
+	      
+	      public static int countSegments(String s) {
+	    	  if(s.isBlank() || s.isEmpty())
+	              return 0;
+	          if(s.indexOf(" ") == -1)
+	              return 1;
+	          s = s.trim();
+	          int count = 1;
+	          for(int i = 1; i < s.length(); i ++)
+	              if(s.charAt(i-1) == ' ' && s.charAt(i) != ' ') count ++;
+	          return count;
 	      }
 }
