@@ -2,12 +2,9 @@ import java.util.*;
 public class StringCoding {
 
 	public static void main(String[] args) {
-		StringBuilder s = new StringBuilder(5);
-		s.insert(0, 'd');
-		s.insert(4, 'a');
-//		s.deleteCharAt(0);
-//		s.insert(0, 'c');
-		System.out.println(s);
+		char a = '3';
+		int b = a - '0';
+		System.out.println(b);
 		
 	}
 	public static void count(int n) {
