@@ -2,7 +2,13 @@ import java.util.*;
 public class StringCoding {
 
 	public static void main(String[] args) {
-		System.out.println(Long.MAX_VALUE);
+		String a = "asb kss df";
+		System.out.println(a.indexOf(" ",20));
+	}
+	public static int gcd(int x, int y) {
+		if(x%y == 0)
+			return y;
+		return gcd(y,x%y);
 	}
 	public static void count(int n) {
 		if(n == 1)
@@ -10,6 +16,10 @@ public class StringCoding {
 		System.out.println(n);
 		count(--n);
 		System.out.println(n);
+	}
+	public static void print(Object[] s) {
+		for(int i = 0; i < s.length; i ++)
+			System.out.println(s[i]);
 	}
 	
 	/*Given a string containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.
@@ -570,5 +580,187 @@ public class StringCoding {
 	                  sofar = Math.max(sofar, j-i+1);
 	          }
 	          return sofar;
+	      }
+	      /*Implement atoi which converts a string to an integer.
+		The function first discards as many whitespace characters as necessary until the first
+		non-whitespace character is found. Then, starting from this character, takes an optional 
+		initial plus or minus sign followed by as many numerical digits as possible, and interprets 
+		them as a numerical value.
+		The string can contain additional characters after those that form the integral number, which
+		 are ignored and have no effect on the behavior of this function.
+		If the first sequence of non-whitespace characters in str is not a valid integral number, or
+		 if no such sequence exists because either str is empty or it contains only whitespace 
+		 characters, no conversion is performed.
+		If no valid conversion could be performed, a zero value is returned.
+		Note:
+		Only the space character ' ' is considered as whitespace character.
+		Assume we are dealing with an environment which could only store integers within the 32-bit 
+		signed integer range: [−231,  231 − 1]. If the numerical value is out of the range of 
+		representable values, INT_MAX (231 − 1) or INT_MIN (−231) is returned.
+		Example 1:
+		
+		Input: "42"
+		Output: 42
+		Example 2:
+		Input: "   -42"
+		Output: -42
+		Explanation: The first non-whitespace character is '-', which is the minus sign.
+		             Then take as many numerical digits as possible, which gets 42.
+		Example 3:
+		Input: "4193 with words"
+		Output: 4193
+		Explanation: Conversion stops at digit '3' as the next character is not a numerical digit.
+		Example 4:
+		Input: "words and 987"
+		Output: 0
+		Explanation: The first non-whitespace character is 'w', which is not a numerical 
+		             digit or a +/- sign. Therefore no valid conversion could be performed.
+		Example 5:
+		
+		Input: "-91283472332"
+		Output: -2147483648
+		Explanation: The number "-91283472332" is out of the range of a 32-bit signed integer.
+		Therefore INT_MIN (−231) is returned.*/
+	      
+	      public static int myAtoi(String str) {
+	          if(str.isBlank() || str.isEmpty())
+	              return 0;
+	          str = str.trim();
+	          char first = str.charAt(0);
+	          if(!(first >= 48 && first <= 57 || first == 43 || first == 45))
+	              return 0;
+	          long total = 0;
+	          var ls = new ArrayList<Integer>();
+	          for(int i = 1; i < str.length(); i ++){
+	              char c = str.charAt(i);
+	              if(!Character.isDigit(c)) break;
+	              ls.add(c-'0');
+	          }
+	          int pow = 0;
+	          for(int i = ls.size()-1; i >= 0; i --){
+	              total += ls.get(i)*Math.pow(10,pow++);   
+	          }  
+	          
+	          if(first == 45){
+	              if(total > 2147483647l) return Integer.MIN_VALUE;
+	              return -1*(int)total;
+	          }
+	          int head = 0;
+	          if(Character.isDigit(first)) head = (first-'0');     
+	          total += head*Math.pow(10,pow);
+	          if(total >= 2147483647l) return Integer.MAX_VALUE;
+	          return (int)total;
+	      }
+	      public static int myAtoiOpt(String str) {
+	          if(str.isBlank() || str.isEmpty())
+	              return 0;
+	          str = str.trim();
+	          char first = str.charAt(0);
+	          if(!(Character.isDigit(first) || first == '-' || first == '+'))
+	              return 0;
+	          int prev = 0, result = 0;
+	          boolean isPos = first == '+';
+	          boolean isNeg = first == '-';
+	          for(int i = (Character.isDigit(first) ? 0 : 1); i < str.length(); i ++){
+	              if(!Character.isDigit(str.charAt(i))) break;
+	              result = result*10 + (str.charAt(i) - '0');
+	              if(result/10 != prev)
+	                  return isNeg ? Integer.MIN_VALUE : Integer.MAX_VALUE;
+	              prev = result;
+	          }
+	          return isNeg ? -1 * result : result;
+	      }
+	      /*Given a string and an integer k, you need to reverse the first k characters 
+	       * for every 2k characters counting from the start of the string. If there are less than 
+	       * k characters left, reverse all of them. If there are less than 2k but greater than or 
+	       * equal to k characters, then reverse the first k characters and left the other as original.
+			Example:
+			Input: s = "abcdefg", k = 2
+			Output: "bacdfeg"
+			Restrictions:
+			The string consists of lower English letters only.
+			Length of the given string and k will in the range [1, 10000]*/
+	      public static String reverseStr(String s, int k) {
+	          StringBuilder st = new StringBuilder();
+	          int i = 0;
+	          while(i < s.length()){
+	              String re = "";
+	              while(i < s.length() && i%(2*k) < k)
+	                  re += s.charAt(i++);
+	              int reI = re.length()-1;
+	              while(reI >= 0)
+	                  st.append(re.charAt(reI--));
+	              if(i >= s.length())
+	                  break;
+	              st.append(s.charAt(i++));
+	          } 
+	          return st.toString();
+	      } 
+	      public static String reverseStrOpt(String s, int k) {
+	          char[] c = s.toCharArray();
+	          for(int i = 0; i < s.length(); i += 2*k){
+	              int j = Math.min(i+k-1,s.length()-1);
+	              int start = i;
+	              while(start <= j){
+	                  char temp = c[start];
+	                  c[start++] = c[j];
+	                  c[j--] = temp;
+	              }           
+	          }
+	          return new String(c);
+	      } 
+	      /*Given two strings A and B, find the minimum number of times A has to 
+	       * be repeated such that B is a substring of it. If no such solution, return -1.
+		For example, with A = "abcd" and B = "cdabcdab".
+		Return 3, because by repeating A three times (“abcdabcdabcd”), B is a substring of it; 
+		and B is not a substring of A repeated two times ("abcdabcd").
+		Note:
+		The length of A and B will be between 1 and 10000.*/
+	      public static int repeatedStringMatch(String A, String B) {
+	          StringBuilder st = new StringBuilder();
+	          int repeat = 0;
+	          while(st.length() < B.length()){
+	              st.append(A);
+	              repeat ++;
+	          }
+	          if(st.indexOf(B) != -1)
+	              return repeat;
+	          st.append(A);
+	          return st.indexOf(B) == -1 ? -1 : ++repeat;
+	      }
+	      
+	      /*For strings S and T, we say "T divides S" if and only if S = T + ... + T  
+	       * (T concatenated with itself 1 or more times)
+			Return the largest string X such that X divides str1 and X divides str2.
+			Example 1:
+			Input: str1 = "ABCABC", str2 = "ABC"
+			Output: "ABC"
+			Example 2:
+			Input: str1 = "ABABAB", str2 = "ABAB"
+			Output: "AB"
+			Example 3:
+			
+			Input: str1 = "LEET", str2 = "CODE"
+			Output: ""
+			Note:
+			
+			1 <= str1.length <= 1000
+			1 <= str2.length <= 1000
+			str1[i] and str2[i] are English uppercase letters.*/
+	      public String gcdOfStrings(String str1, String str2) {
+	          String big = str1.length() > str2.length() ? str1 : str2;
+	          String small = str1.length() > str2.length() ? str2 : str1;
+	         
+	          return sp(big,small);
+	      }
+	      public String sp(String str1, String str2){
+	          if(str1.split(str2).length == 0)
+	              return str2;
+	          if(str1.indexOf(str2) == -1)
+	              return "";
+	          StringBuilder st = new StringBuilder();
+	          String [] result = str1.split(str2);
+	          for(String s : result) st.append(s);
+	          return sp(str2, st.toString());
 	      }
 }
