@@ -4,6 +4,7 @@ public class StringCoding {
 	public static void main(String[] args) {
 		String a = "asb kss df";
 		System.out.println(a.indexOf(" ",20));
+		
 	}
 	public static int gcd(int x, int y) {
 		if(x%y == 0)
@@ -763,4 +764,168 @@ public class StringCoding {
 	          for(String s : result) st.append(s);
 	          return sp(str2, st.toString());
 	      }
+	      /*Given a string, you need to reverse the order of characters in each word within 
+	       * a sentence while still preserving whitespace and initial word order.
+		Example 1:
+		Input: "Let's take LeetCode contest"
+		Output: "s'teL ekat edoCteeL tsetnoc"*/
+	      public static String reverseWords(String s) {
+	          StringBuilder str = new StringBuilder();
+	          char[] strArr = s.toCharArray();
+	          int i = s.indexOf(" ");
+	          int j = 0;  
+	          while(j < s.length()){   
+	              int last = i == -1 ? s.length()-1 : i-1;
+	              while(j <= last){
+	                  char temp = strArr[j];
+	                  strArr[j++] = strArr[last];
+	                  strArr[last--] = temp;
+	              }
+	              j = i == -1 ? s.length() : i+1;
+	              i = s.indexOf(" ", i+1);
+	          }
+	          return new String(strArr);
+	      }
+	      public static String reverseWordsUsingBuildingClass(String s) {
+	          String []arr = s.split(" ");
+	          StringBuilder str = new StringBuilder();
+	          
+	          for(String temp : arr){
+	              str.append(new StringBuilder(temp).reverse());
+	              str.append(" ");
+	          }
+	          return str.toString().trim();
+	      }
+	      /*You need to construct a string consists of parenthesis and integers from a 
+	       * binary tree with the preorder traversing way.
+		The null node needs to be represented by empty parenthesis pair "()". And you need 
+		to omit all 
+		the empty parenthesis pairs that don't affect the one-to-one mapping relationship between 
+		the string and the original binary tree.
+		Example 1:
+		Input: Binary tree: [1,2,3,4]
+		       1
+		     /   \
+		    2     3
+		   /    
+		  4     
+		Output: "1(2(4))(3)"
+		
+		Explanation: Originallay it needs to be "1(2(4)())(3()())", 
+		but you need to omit all the unnecessary empty parenthesis pairs. 
+		And it will be "1(2(4))(3)".
+		Example 2:
+		Input: Binary tree: [1,2,3,null,4]
+		       1
+		     /   \
+		    2     3
+		     \  
+		      4 
+		
+		Output: "1(2()(4))(3)"
+		
+		Explanation: Almost the same as the first example, 
+		except we can't omit the first parenthesis pair to break the one-to-one mapping relationship 
+		between the input and the output.*/
+	      public static String tree2str(TreeNode t) {
+	          if(t == null)
+	              return "";
+	          return treeRec(t, t.left, t.right);
+	      }
+	      public static String treeRec(TreeNode t, TreeNode l, TreeNode r){
+	          if(l == null && r == null)
+	              return t.val+ "";
+	          String left = "", right = "";
+	          if(t.left == null && t.right != null){
+	              left = "";
+	              right = treeRec(t.right,t.right.left,t.right.right);
+	          }
+
+	          else if(t.left != null && t.right == null){
+	              left = treeRec(t.left,t.left.left,t.left.right);
+	              right = "";
+	          }
+	          else {
+	              left = treeRec(t.left,t.left.left,t.left.right);
+	              right = treeRec(t.right,t.right.left,t.right.right);
+	          }
+	          return right == "" ? t.val + "(" + left + ")" : t.val + "(" + left + ")" + "(" + right + ")";
+	      }
+	      public static String tree2strIterate(TreeNode t) {
+	          if(t == null)
+	              return "";
+	          var stack = new Stack<TreeNode>();
+	          StringBuilder result = new StringBuilder();
+	          var visited = new HashSet<TreeNode>();
+	          stack.push(t);
+	          while(!stack.isEmpty()){
+	              var temp = stack.peek();
+	              if(visited.contains(temp)){
+	                  result.append(")");
+	                  stack.pop();
+	                  continue;
+	              }
+	              result.append("("+temp.val);
+	              visited.add(temp);
+	              if(temp.left == null && temp.right != null)
+	                  result.append("()");
+	              if(temp.right != null)
+	                   stack.push(temp.right);
+	              if(temp.left != null)
+	                   stack.push(temp.left);    
+	          }
+	          return result.toString().substring(1,result.toString().length()-1);
+	      }
+	      public static String tree2strRec(TreeNode t) {
+	          if(t == null)
+	              return "";
+	          if(t.left == null && t.right == null)
+	              return t.val+"";
+	          else if(t.left == null && t.right != null){
+	              return  t.val + "()" + "(" + tree2str(t.right)+")";
+	          }
+	          else if(t.right != null){
+	              return t.val + "("+ tree2str(t.left) + ")" + "(" +  tree2str(t.right) + ")";
+	          }
+	          else{
+	              return t.val + "("+ tree2str(t.left) + ")";
+	          }
+	      }
+	      /*X is a good number if after rotating each digit individually by 180 degrees, 
+	       * we get a valid number that is different from X.  Each digit must be rotated - 
+	       * we cannot choose to leave it alone.
+		A number is valid if each digit remains a digit after rotation. 0, 1, and 8 rotate to 
+		themselves; 2 and 5 rotate to each other; 6 and 9 rotate to each other, and the rest of 
+		the numbers do not rotate to any other number and become invalid.
+		Now given a positive number N, how many numbers X from 1 to N are good?
+		Example:
+		Input: 10
+		Output: 4
+		Explanation: 
+		There are four good numbers in the range [1, 10] : 2, 5, 6, 9.
+		Note that 1 and 10 are not good numbers, since they remain unchanged after rotating.*/
+	      public static int rotatedDigits(int N) {
+	          int count = 0;
+	           for(int i = 1; i <= N; i ++){
+	               int j = i;
+	               boolean contains2569 = false, contains374 = false;
+	               while(j != 0){
+	                   int mol = j%10;
+	                   if(mol == 2 || mol == 5 || mol == 6 || mol == 9)
+	                       contains2569 = true;
+	                   if(mol == 3 || mol == 7 || mol == 4)
+	                       contains374 = true;
+	                   j = j/10;
+	               }
+	               if(contains2569 && !contains374)
+	                       count ++;
+	           }
+	           return count;
+	       }
 }
+class TreeNode {
+	   int val;
+	   TreeNode left;
+	   TreeNode right;
+	   TreeNode(int x) { val = x; }
+ }
