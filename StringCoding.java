@@ -1080,6 +1080,89 @@ public class StringCoding {
 	         }
 	         return ans;
 	     }
+	     /*Given a string S, return the "reversed" string where all 
+	      * characters that are not a letter stay in the same place, and all 
+	      * letters reverse their positions.
+		Example 1:
+		Input: "ab-cd"
+		Output: "dc-ba"
+		Example 2:
+		
+		Input: "a-bC-dEf-ghIj"
+		Output: "j-Ih-gfE-dCba"
+		Example 3:
+		
+		Input: "Test1ng-Leet=code-Q!"
+		Output: "Qedo1ct-eeLg=ntse-T!"
+		Note:
+		
+		S.length <= 100
+		33 <= S[i].ASCIIcode <= 122 
+		S doesn't contain \ or "*/
+	     public static String reverseOnlyLetters(String S) {
+	         var stack = new Stack<Character>();
+	         for(char c : S.toCharArray()){
+	             if(Character.isLetter(c))
+	                 stack.push(c);
+	         }
+	         var st = new StringBuilder();
+	         for(char c : S.toCharArray()){
+	             if(Character.isLetter(c))
+	                 st.append(stack.pop());
+	             else
+	                 st.append(c);
+	         }
+	         return st.toString();
+	     }
+	     public static String reverseOnlyLettersPointers(String S) {
+	         char[] arr = S.toCharArray();
+	         for(int i = 0, j = arr.length-1; i <= j && i < arr.length && j >= 0;){
+	             boolean iIsLetter = Character.isLetter(arr[i]);
+	             boolean jIsLetter = Character.isLetter(arr[j]);
+	             if(!iIsLetter)
+	                 i++;
+	             if(!jIsLetter)
+	                 j--;
+	             if(iIsLetter && jIsLetter){
+	                 char c = arr[i];
+	                 arr[i++] = arr[j];
+	                 arr[j--] = c;
+	             }
+	         }
+	         return new String(arr);
+	     }
+	     /*Given a string text, you want to use the characters of text to form as 
+	      * many instances of the word "balloon" as possible.
+
+		You can use each character in text at most once. Return the maximum number 
+		of instances that can be formed.
+		Example 1:
+		Input: text = "nlaebolko"
+		Output: 1
+		Example 2:
+		Input: text = "loonbalxballpoon"
+		Output: 2
+		Example 3:
+		Input: text = "leetcode"
+		Output: 0*/
+	     
+	     public static int maxNumberOfBalloons(String text) {
+	         int[] arr = new int[26];
+	         for(char c : text.toCharArray()){
+	             arr[c-97] += 1;
+	         }
+	        
+	         int min = Integer.MAX_VALUE;
+	         if(arr['b'-97] == 0 || arr['a'-97] == 0 || arr['l'-97] == 0 
+	            || arr['o'-97] == 0 || arr['n'-97] == 0)
+	             return 0;
+	         min = Math.min(min, arr['b'-97]);
+	         min = Math.min(min, arr['a'-97]);
+	         min = Math.min(min, arr['n'-97]);
+	         min = Math.min(min, arr['l'-97]/2);
+	         min = Math.min(min, arr['o'-97]/2);
+	         return min;
+	     }
 }
 class TreeNode {
 	   int val;

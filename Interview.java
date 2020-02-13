@@ -29,6 +29,8 @@ public class Interview {
 		String a = "sfsfsf";
 		a += ".";
 		System.out.println(a);
+		String b = "sfs\\\"";
+		System.out.println(b);
 	}
 
 }
