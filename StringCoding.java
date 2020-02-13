@@ -3,18 +3,14 @@ import java.util.*;
 public class StringCoding {
 
 	public static void main(String[] args) {
-		Student s = new Student("Xin", 21);
-		Student y = new Student("liu",19);
-		Student o = new Student("in", 20);
-		Student l = new Student("iu",20);
-		var ls = new ArrayList<Student>();
-		ls.add(s);
-		ls.add(y);
-		ls.add(o);
-		ls.add(l);
-		Collections.sort(ls);
-		for(int i = 0; i < ls.size(); i++)
-			System.out.println(ls.get(i));
+		int[] a = {2,4,1,1,3,10};
+		for(int i : a)
+			System.out.println(i);
+		var ls = new ArrayList<Integer>();
+		ls.add(1);
+		ls.add(3);
+		ls.add(4);
+		
 		
 	}
 	public static int gcd(int x, int y) {
@@ -1163,6 +1159,130 @@ public class StringCoding {
 	         min = Math.min(min, arr['o'-97]/2);
 	         return min;
 	     }
+	     /*Given an array of characters, compress it in-place.
+		The length after compression must always be smaller than or equal to the original array.
+		Every element of the array should be a character (not int) of length 1.
+		After you are done modifying the input array in-place, return the new length of the array.
+		Follow up:
+		Could you solve it using only O(1) extra space?
+		Example 1:
+		
+		Input:
+		["a","a","b","b","c","c","c"]
+		
+		Output:
+		Return 6, and the first 6 characters of the input array should be: ["a","2","b","2","c","3"]
+		
+		Explanation:
+		"aa" is replaced by "a2". "bb" is replaced by "b2". "ccc" is replaced by "c3".
+		 
+		
+		Example 2:
+		
+		Input:
+		["a"]
+		
+		Output:
+		Return 1, and the first 1 characters of the input array should be: ["a"]
+		
+		Explanation:
+		Nothing is replaced.
+		Example 3:
+		
+		Input:
+		["a","b","b","b","b","b","b","b","b","b","b","b","b"]
+		
+		Output:
+		Return 4, and the first 4 characters of the input array should be: ["a","b","1","2"].
+		
+		Explanation:
+		Since the character "a" does not repeat, it is not compressed. "bbbbbbbbbbbb" is replaced by "b12".
+		Notice each digit has it's own entry in the array.*/
+	     public static int compress(char[] chars) {
+	         int read = 1, write = 0, count = 1;
+	         while(read < chars.length){
+	             if(chars[read] == chars[read-1])
+	                 count ++;
+	             else{
+	                 if(count > 1){
+	                     String s = count + "";
+	                     for(char c : s.toCharArray()){
+	                         chars[++write] = c;   
+	                     }
+	                 }
+	                 chars[++write] = chars[read];
+	                 count = 1;
+	             }
+	             read ++;
+	         }
+	         if(count > 1){
+	             String s = count + "";
+	             for(char c : s.toCharArray()){
+	                 chars[++write] = c;   
+	             }
+	         }
+	         return ++write;
+	     }
+	     /*Let's define a function f(s) over a non-empty string s, which calculates the frequency of the smallest character in s. For example, if s = "dcce" then f(s) = 2 because the smallest character is "c" and its frequency is 2.
+
+Now, given string arrays queries and words, return an integer array answer, where each answer[i] is the number of words such that f(queries[i]) < f(W), where W is a word in words.
+
+ 
+
+Example 1:
+
+Input: queries = ["cbd"], words = ["zaaaz"]
+Output: [1]
+Explanation: On the first query we have f("cbd") = 1, f("zaaaz") = 3 so f("cbd") < f("zaaaz").
+Example 2:
+
+Input: queries = ["bbb","cc"], words = ["a","aa","aaa","aaaa"]
+Output: [1,2]
+Explanation: On the first query only f("bbb") < f("aaaa"). On the second query both f("aaa") and f("aaaa") are both > f("cc").
+ 
+
+Constraints:
+
+1 <= queries.length <= 2000
+1 <= words.length <= 2000
+1 <= queries[i].length, words[i].length <= 10
+queries[i][j], words[i][j] are English lowercase letters.*/
+	     public static int[] numSmallerByFrequency(String[] queries, String[] words) {
+	         int[] q1 = new int[queries.length];
+	         int[] w1 = new int[words.length];
+	         var ans = new ArrayList<Integer>();
+	         int index = 0;
+	         for(String s : queries){
+	             int[] arry = new int[26];
+	             int min = Integer.MAX_VALUE;
+	             for(char c : s.toCharArray()){
+	                 arry[c-'a'] += 1;
+	                 min = Math.min(min,c-'a');
+	             }
+	             q1[index++] = arry[min];
+	         } 
+	         index = 0;
+	         for(String s : words){
+	             int[] arry = new int[26];
+	             int min = Integer.MAX_VALUE;
+	             for(char c : s.toCharArray()){
+	                 arry[c-'a'] += 1;
+	                 min = Math.min(min,c-'a');
+	             }
+	             w1[index++] = arry[min];
+	         }      
+	         Arrays.sort(w1);       
+	         for(int i : q1){
+	             System.out.println(i);
+	             int count = 0;
+	             for(int j = w1.length-1; j >= 0; j --)
+	                 if(w1[j] > i)
+	                     count ++;
+	             ans.add(count);
+	         }
+	         return ans.stream().mapToInt(i->i).toArray();
+	     }
+	     
 }
 class TreeNode {
 	   int val;
