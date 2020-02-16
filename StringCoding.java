@@ -3,15 +3,146 @@ import java.util.*;
 public class StringCoding {
 
 	public static void main(String[] args) {
-		int[] a = {2,4,1,1,3,10};
-		for(int i : a)
-			System.out.println(i);
-		var ls = new ArrayList<Integer>();
-		ls.add(1);
-		ls.add(3);
-		ls.add(4);
+		int []a = {2,2,2};
 		
+		System.out.println(isPossible(a));
 		
+
+	}
+	 public static boolean isPossible(int[] target) {
+	        int max = 0;
+	        int index = 0;
+	        for(int i= 0 ;i < target.length ;i++){
+	            if(max < target[i]){
+	                max = target[i];
+	                index = i;
+	            }
+	        }
+	        if(max == 1)return true; // means we finally get an array full of 1, then we return true;
+	        for(int i= 0;i<target.length;i++){
+	            if(i == index)continue; // skip the max one's index
+	            if(target[i] > max)return false; // max must be equal or bigger to any num in the array.
+	            max-=target[i];// subtract the other num in the array.
+	        }
+	        target[index] = max; // change the current one to the new max.
+	        return isPossible(target); //recursively call the function
+	    }
+	public static void print(int[][]a) {
+		for(int i = 0; i < a.length; i++) {
+			System.out.print("[");
+			for(int j = 0; j < a[0].length; j ++) {
+				System.out.print(a[i][j]+",");
+			}
+			System.out.println("],");
+		}
+	}
+	public static void sort(int[][]a) {
+		Arrays.sort(a,(c,b) -> {
+			return c[1] == b[1] ? c[0] - b[0] : c[1] - b[1];
+		});
+	}
+	public static boolean circularArrayLoop(int[] nums) {
+		 if(nums.length == 1)
+	            return false;
+			int j = 0, i = 0, step = 0,count = -1;
+			while(j < nums.length) {
+				count ++;
+				int nextMove = nums[i];					
+	            int temp;
+	            if(nextMove > 0)
+	                temp = (i+nextMove)%nums.length;  
+	            else
+	                temp = i+nextMove >= 0 ?  i+nextMove : nextMove%nums.length+nums.length + i;          
+	            step += nextMove;
+	              if(temp > nums.length)
+	                 return false;
+	            boolean sameSign = nums[temp] * nums[i] > 0 ? true : false;
+	              if(temp == i && count != 0 || !sameSign  || sameSign && (temp > i && step >= nums.length && nextMove > 0) 
+	            		  || (temp < i && Math.abs(step) >= nums.length && nextMove < 0)){
+					j++;
+					step = 0;
+					i = j;
+					count = -1;				
+					continue;
+				}  
+	            if(temp == j && count != 0) 
+						return true;	
+	            i = temp;
+			}
+				return false;
+	    }
+	
+
+	public static boolean isCir(int[] nums) {
+		boolean isNeg = false, isPos = false;
+		int j = 0, i = 0, step = 0,count = -1;
+		while(j < nums.length) {
+			count ++;
+			int nextMove = nums[i];
+			if(nextMove < 0) 
+				isNeg = true;
+			else
+				isPos = true;
+			if(isNeg && isPos) {
+				j++;
+				step = 0;
+				i = j;
+				count = -1;
+				isNeg = false;
+				isPos = false;
+				continue;
+			}
+			if(isPos) {
+			if((i + nextMove)%nums.length == i && count == 0) {
+				j++;
+				step = 0;
+				i = j;
+				count = -1;
+				isNeg = false;
+				isPos = false;
+				continue;
+			}
+				step += nextMove;
+				int temp  = (i + nextMove)%nums.length;
+				if(i > j && step >= nums.length || i == temp){
+					j ++;
+					i = j;
+					count = -1;
+					step = 0;
+					isNeg = false;
+					isPos = false;
+					continue;
+				}
+				i = temp;
+				if(i == j && count != 0) 
+					return true;
+			}else {
+				step += nextMove;
+				int temp = i+nextMove >= 0 ?  i+nextMove : ((nums[i]%nums.length)+nums.length) + i;
+				if(temp == i && count == 0) {
+					j++;
+					step = 0;
+					i = j;
+					count = -1;
+					isNeg = false;
+					isPos = false;
+					continue;
+				}
+				i = temp;
+				if(i > j && Math.abs(step) >= nums.length || i == temp){
+					j ++;
+					i = j;
+					count = -1;
+					step = 0;
+					isNeg = false;
+					isPos = false;
+					continue;
+				}
+				if(i == j && count != 0) 
+					return true;
+			}
+		}
+			return false;
 	}
 	public static int gcd(int x, int y) {
 		if(x%y == 0)
@@ -1282,6 +1413,49 @@ queries[i][j], words[i][j] are English lowercase letters.*/
 	         }
 	         return ans.stream().mapToInt(i->i).toArray();
 	     }
+	     public static int numUniqueEmails(String[] emails) {
+	         var set = new HashSet<String>();
+	        for(String s : emails){
+	            String[] arr = s.split("@");
+	            int index = arr[0].indexOf('+');
+	            if(index != -1)
+	                arr[0] = arr[0].substring(0,index);
+	            String[] dot = arr[0].split("\\.");
+	            StringBuilder st = new StringBuilder();
+	            for(String d : dot)
+	                st.append(d);
+	    
+	            st.append("@"+arr[1]);
+	            set.add(st.toString());
+	        }
+	        return set.size();	      
+	    }
+	     public static boolean buddyStrings(String A, String B) {
+	         if(A.length() != B.length()) return false;
+	           int first = -1, second = -1;
+	          if(A.equals(B)){
+	              int[] count = new int[26];
+	              for(char c : A.toCharArray()){
+	                  count[c-'a'] ++;
+	                  if(count[c-'a'] >= 2)
+	                      return true;
+	              }
+	              return false;
+	          }else{
+	              for(int i = 0; i < A.length(); i ++){
+	                  if(A.charAt(i) != B.charAt(i)){
+	                      if(first == -1)
+	                          first = i;
+	                      else if(second == -1)
+	                          second = i;
+	                      else
+	                          return false;
+	                  }
+	              }
+	          }
+	          return (second != -1) && A.charAt(first) == B.charAt(second) &&
+	                  A.charAt(second) == B.charAt(first);
+	      }   
 	     
 }
 class TreeNode {
