@@ -3,12 +3,26 @@ import java.util.*;
 public class StringCoding {
 
 	public static void main(String[] args) {
-		int []a = {2,2,2};
+		String [] a = {"abc","abc","cab"};
+		int[] b = {1,3,4};
 		
-		System.out.println(isPossible(a));
+		System.out.println(b);
 		
 
 	}
+	public static int numSpecialEquivGroups(String[] A) {
+        Set<String> seen = new HashSet();
+        for (String S: A) {
+            int[] count = new int[52];
+            for (int i = 0; i < S.length(); ++i) {
+                count[S.charAt(i) - 'a' + 26 * (i % 2)]++;
+            }
+            seen.add(Arrays.toString(count));
+            
+            System.out.println(Arrays.toString(count));
+        }
+        return seen.size();
+    }
 	 public static boolean isPossible(int[] target) {
 	        int max = 0;
 	        int index = 0;
