@@ -1,13 +1,23 @@
 import java.util.*;
+import java.util.stream.*;
 
 public class StringCoding {
 
 	public static void main(String[] args) {
-		String [] a = {"abc","abc","cab"};
-		int[] b = {1,3,4};
+		int[] a = {3,5,0,1,-2,4};
+		Arrays.sort(a);
+		print(a);
+		int i = Arrays.binarySearch(a, 6);
+		System.out.println(-i-1);
 		
-		System.out.println(b);
-		
+
+	}
+	public static void print(int []a) {
+		System.out.print("[");
+		for(int i : a) {
+			System.out.print(i+ ",");
+		}
+		System.out.println("]");
 
 	}
 	public static int numSpecialEquivGroups(String[] A) {
@@ -1495,5 +1505,22 @@ class Student implements Comparable{
 	}
 	public String toString() {
 		return "name: " + name + "  age:" + age + "\n";
+	}
+}
+class kthLargest{
+	PriorityQueue<Integer> p;
+	int K;
+	public kthLargest(int k, int[] nums) {
+		p = new PriorityQueue<Integer>();
+		for(int i : nums) {
+			p.offer(i);
+			if(p.size() > k) p.poll();
+		}
+		K = k;
+	}
+	public int add(int val) {
+		p.offer(val);
+		if(p.size() > K) p.poll();
+		return p.peek();
 	}
 }
