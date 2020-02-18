@@ -4,13 +4,97 @@ import java.util.stream.*;
 public class StringCoding {
 
 	public static void main(String[] args) {
-		int[] a = {3,5,0,1,-2,4};
-		Arrays.sort(a);
-		print(a);
-		int i = Arrays.binarySearch(a, 6);
-		System.out.println(-i-1);
-		
-
+		node head = new node(3);
+		node n1 = new node(0);
+		node n3 = new node(1);
+		node n4 = new node(2);
+		node n5 = new node(4);
+		node n6 = new node(5);
+		node n7 = new node(6);
+		node n8 = new node(7);
+		head.next = n1;
+		n1.next = n3;
+		n3.next = n4;
+		n4.next = n5;
+		n5.next = n6;
+		n6.next = n7;
+		n7.next = n8;
+		n8.next = n1;
+		node temp = detectCycle(head);
+		System.out.println(temp.val);
+	}
+	public static node detectCycle1(node head) {
+        if(head == null)
+            return null;
+        node prev = head;
+        node curr = head;
+        while(curr.next != null){
+            curr = curr.next.next;
+            if(curr == null)
+                return null;
+            if(curr == prev)
+                break;
+            prev = prev.next;
+        }
+        if(curr == null || curr.next == null)
+            return null;
+        prev = head;
+        while(prev != curr){
+            prev = prev.next;
+            curr = curr.next;
+            System.out.println("prev-> " + prev.val + " curr-> " + curr.val);
+        }
+        return prev;
+    }
+    public static node detectCycle(node head) {
+		  node slow = head, fast = head;
+		  
+		  while (fast != null && fast.next != null) {
+		    slow = slow.next;
+		    fast = fast.next.next;
+		    
+		    if (slow == fast)
+		        // found the cycle
+		        break;
+		  }
+		  
+		  if (fast == null || fast.next == null)
+		    // in case there is no cycle
+		    return null;
+		  
+		  // let the slow pointer go from the head 
+		  // and meet the fast pointer
+		  // the meeting point is our answer
+		  slow = head;
+		  
+		  while (slow != fast) {
+		    slow = slow.next;
+		    fast = fast.next;
+		    System.out.println("slow ->" + slow.val + " fast ->" + fast.val );
+		  }
+		  
+		  return slow;
+		}
+	public static void pNode(node n) {
+		while(n != null) {
+			System.out.print(n.val + " -> ");
+			n = n.next;
+		}
+	}
+	//swap in-place, move all zeros to back
+	public static void moveZeros(int[] nums) {
+		int write = 0, read = 0;
+		while(read < nums.length) {
+			if(nums[read] != 0)
+				nums[write++] = nums[read];
+			read ++;
+		}
+		while(write < nums.length)
+			nums[write++] = 0;
+	}
+	public static int binarySearch(int[] nums, int target) {
+		int i = Arrays.binarySearch(nums, target);
+		return i >= 0 ? i : -i-1;
 	}
 	public static void print(int []a) {
 		System.out.print("[");
@@ -1522,5 +1606,13 @@ class kthLargest{
 		p.offer(val);
 		if(p.size() > K) p.poll();
 		return p.peek();
+	}
+}
+class node{
+	int val;
+	node next;
+	node(int val){
+		this.val = val;
+		next = null;
 	}
 }
