@@ -9,7 +9,7 @@ public class StringCoding {
 		node n3 = new node(1);
 		node n4 = new node(2);
 		node n5 = new node(4);
-		node n6 = new node(5);
+		node n6 = new node(4);
 		node n7 = new node(6);
 		node n8 = new node(7);
 		head.next = n1;
@@ -19,9 +19,51 @@ public class StringCoding {
 		n5.next = n6;
 		n6.next = n7;
 		n7.next = n8;
-		n8.next = n1;
-		node temp = detectCycle(head);
-		System.out.println(temp.val);
+	
+		pNode(head);
+//		var temp = deleteDuplicates(head);
+//		pNode(temp);
+		var temp = n5;
+		temp.next = null;
+	//	n5.next = null;
+		pNode(head);
+	}
+	public static node deleteDuplicates(node head) {
+        if(head == null)
+            return null;
+        var write = head;
+        var read = write.next;
+        node temp = write;
+        while(read != null && write != null){
+            if(write.val == read.val){
+                temp = read;
+                read = read.next;
+                continue;
+            }  
+            temp.next = null;
+            write.next = read;
+            write = read;
+            read = read.next;
+        }
+        write.next = null;
+            
+        return head;
+    }
+	public static node reverseNode(node head) {
+		if(head == null)
+			return null;
+		var stack = new Stack<node>();
+		while(head != null) {
+			stack.push(head);
+			head = head.next;
+		}
+		node newHead = new node(stack.pop().val);
+		node temp = newHead;
+		while(!stack.isEmpty()) {
+			temp.next = new node(stack.pop().val);
+			temp = temp.next;
+		}
+		return newHead;
 	}
 	public static node detectCycle1(node head) {
         if(head == null)
@@ -80,6 +122,7 @@ public class StringCoding {
 			System.out.print(n.val + " -> ");
 			n = n.next;
 		}
+		System.out.println("");
 	}
 	//swap in-place, move all zeros to back
 	public static void moveZeros(int[] nums) {
