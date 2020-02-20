@@ -4,51 +4,96 @@ import java.util.stream.*;
 public class StringCoding {
 
 	public static void main(String[] args) {
-		node head = new node(3);
-		node n1 = new node(0);
-		node n3 = new node(1);
-		node n4 = new node(2);
-		node n5 = new node(4);
-		node n6 = new node(4);
-		node n7 = new node(6);
-		node n8 = new node(7);
-		head.next = n1;
-		n1.next = n3;
-		n3.next = n4;
-		n4.next = n5;
-		n5.next = n6;
-		n6.next = n7;
-		n7.next = n8;
-	
-		pNode(head);
-//		var temp = deleteDuplicates(head);
-//		pNode(temp);
-		var temp = n5;
-		temp.next = null;
-	//	n5.next = null;
-		pNode(head);
+//		node head = new node(3);
+//		node n1 = new node(0);
+//		node n3 = new node(1);
+//		node n4 = new node(2);
+//		node n5 = new node(4);
+//		node n6 = new node(4);
+//		node n7 = new node(6);
+//		node n8 = new node(7);
+//		head.next = n1;
+//		n1.next = n3;
+//		n3.next = n4;
+//		n4.next = n5;
+//		n5.next = n6;
+//		n6.next = n7;
+//		n7.next = n8;
+	 char[][] a = {{'1','1','1','1','0'},{'1','1','0','1','0'},{'1','1','0','0','0'},{'0','0','0','0','0'}};
+	 System.out.println(numIslands(a));
+	 numIslands(a);
 	}
+	 public static int numIslands(char[][] grid) {
+	        if(grid.length == 0)
+	            return 0;
+	        int island = 0;
+	        boolean [][] visited = new boolean[grid.length][grid[0].length];
+	       
+	        for(int i = 0; i < grid.length; i ++){
+	            for(int j = 0; j < grid[i].length; j ++){
+	                if(grid[i][j] == '1' && !visited[i][j]){
+	                    findIsland(i,j,grid,visited);
+	                    island ++;
+	                }
+	            }
+	        }
+	        return island;
+	    }
+	    public static void findIsland(int i, int j, char[][] grid, boolean[][] visited){
+	        int n = grid.length;
+	        int l = grid[0].length;
+	        var stack = new Stack<Pair>();
+	        stack.push(new Pair(i,j));
+        	visited[i][j] = true;
+
+	        while(!stack.isEmpty()){
+	            var temp = stack.pop();
+	            int tempi = temp.first;
+	            int tempj = temp.second;
+	            
+	            if(tempi+1 < n && !visited[tempi+1][tempj] && grid[tempi+1][tempj] == '1') {
+	            	visited[tempi+1][tempj] = true;
+	                stack.push(new Pair(tempi+1,tempj));
+	            }
+	            if(tempj+1 < l && !visited[tempi][tempj+1] && grid[tempi][tempj+1] == '1') {
+	            	visited[tempi][tempj+1] = true;
+	                stack.push(new Pair(tempi,tempj+1));
+	            }
+	        }
+//	        for(int ii = 0; ii < visited.length; ii ++){
+//	            for(int jj = 0; jj < visited[0].length; jj ++){
+//	                System.out.print(ii + ", " + jj + ": " + visited[ii][jj] + ",");
+//	            }
+//	            System.out.println("");
+//	        }
+	    }
 	public static node deleteDuplicates(node head) {
         if(head == null)
             return null;
         var write = head;
         var read = write.next;
-        node temp = write;
         while(read != null && write != null){
             if(write.val == read.val){
-                temp = read;
                 read = read.next;
                 continue;
             }  
-            temp.next = null;
             write.next = read;
             write = read;
             read = read.next;
         }
         write.next = null;
-            
         return head;
     }
+	public static node deleteDuplicates2(node head) {
+		var curr = head;
+		while(curr != null && curr.next != null) {
+			if(curr.val == curr.next.val)
+				curr.next = curr.next.next;
+			else
+				curr = curr.next;
+		}
+		return head;
+	}
 	public static node reverseNode(node head) {
 		if(head == null)
 			return null;
@@ -1658,4 +1703,12 @@ class node{
 		this.val = val;
 		next = null;
 	}
+}
+class Pair{
+    int first;
+    int second;
+    Pair(int first, int second){
+        this.first = first;
+        this.second = second;
+    }
 }
