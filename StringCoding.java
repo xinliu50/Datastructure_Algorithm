@@ -23,6 +23,54 @@ public class StringCoding {
 	 System.out.println(numIslands(a));
 	 numIslands(a);
 	}
+	
+	public static TreeNode merge(TreeNode t1, TreeNode t2) {
+		if(t1 == null)
+			return t2;
+		if(t2 == null)
+			return t1;
+		t1.val += t2.val;
+		t1.left = merge(t1.left,t2.left);
+		t1.right = merge(t1.right,t2.right);
+		return t1;
+	}
+	public static TreeNode mergeStack(TreeNode t1, TreeNode t2) {
+		if(t1 == null) return t2;
+		var stack = new Stack<TreeNode[]>();
+		stack.push(new TreeNode[] {t1,t2});
+		while(!stack.isEmpty()) {
+			var temp = stack.pop();
+			if(temp[1] == null)
+				continue;
+			temp[0].val += temp[1].val;
+			if(temp[0].left == null)
+				temp[0].left = temp[1].left;
+			else
+				stack.push(new TreeNode[] {temp[0].left, temp[1].left});
+			if(temp[0].right == null)
+				temp[0].left = temp[1].left;
+			else
+				stack.push(new TreeNode[] {temp[0].right, temp[1].right});
+		}
+		return t1;
+	}
+	public static int minDepth(TreeNode root) {
+		if(root == null)
+			return 0;
+		return findDepth(root,1,Integer.MAX_VALUE);
+	}
+	public static int findDepth(TreeNode root, int level, int min) {
+		if(root.left == null && root.right == null)
+			return Math.min(level, min);
+		int left = Integer.MAX_VALUE;
+		int right = Integer.MAX_VALUE;
+		if(root.left != null)
+			left = findDepth(root.left,level+1,min);
+		if(root.right != null)
+			right = findDepth(root.right,level+1,min);
+		return Math.min(left, right);
+		
+	}
 	 public static int numIslands(char[][] grid) {
 	        if(grid.length == 0)
 	            return 0;
@@ -58,6 +106,14 @@ public class StringCoding {
 	            if(tempj+1 < l && !visited[tempi][tempj+1] && grid[tempi][tempj+1] == '1') {
 	            	visited[tempi][tempj+1] = true;
 	                stack.push(new Pair(tempi,tempj+1));
+	            }
+	            if(tempi-1 >= 0 && !visited[tempi-1][tempj] && grid[tempi-1][tempj] == '1') {
+	            	visited[tempi-1][tempj] = true;
+	                stack.push(new Pair(tempi-1,tempj));
+	            }
+	            if(tempj-1 >= 0 && !visited[tempi][tempj-1] && grid[tempi][tempj-1] == '1') {
+	            	visited[tempi][tempj-1] = true;
+	                stack.push(new Pair(tempi,tempj-1));
 	            }
 	        }
 //	        for(int ii = 0; ii < visited.length; ii ++){
@@ -1704,6 +1760,16 @@ class node{
 		next = null;
 	}
 }
+//class TreeNode{
+//	int val;
+//	TreeNode left;
+//	TreeNode right;
+//	TreeNode(int val){
+//		this.val = val;
+//		left = null;
+//		right = null;
+//	}
+//}
 class Pair{
     int first;
     int second;
