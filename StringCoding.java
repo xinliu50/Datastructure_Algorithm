@@ -4,26 +4,143 @@ import java.util.stream.*;
 public class StringCoding {
 
 	public static void main(String[] args) {
-//		node head = new node(3);
-//		node n1 = new node(0);
-//		node n3 = new node(1);
-//		node n4 = new node(2);
-//		node n5 = new node(4);
-//		node n6 = new node(4);
-//		node n7 = new node(6);
-//		node n8 = new node(7);
-//		head.next = n1;
-//		n1.next = n3;
-//		n3.next = n4;
-//		n4.next = n5;
-//		n5.next = n6;
-//		n6.next = n7;
-//		n7.next = n8;
-	 char[][] a = {{'1','1','1','1','0'},{'1','1','0','1','0'},{'1','1','0','0','0'},{'0','0','0','0','0'}};
-	 System.out.println(numIslands(a));
-	 numIslands(a);
+		node head = new node(3);
+		node n1 = new node(0);
+		node n3 = new node(1);
+		node n4 = new node(2);
+		node n5 = new node(4);
+		node n6 = new node(4);
+		node n7 = new node(6);
+		node n8 = new node(6);
+		head.next = n1;
+		n1.next = n3;
+		n3.next = n4;
+		n4.next = n5;
+		n5.next = n6;
+		n6.next = n7;
+		n7.next = n8;
+		
+		System.out.println(dumpNodeValue(head));
+		
+		
 	}
-	
+	public static ArrayList<Integer> dumpNodeValue(node head) {
+		var temp = head;
+		var set = new HashSet<Integer>();
+		var ls = new ArrayList<Integer>();
+		while(temp != null) {
+			if(!set.add(temp.val)) {
+				ls.add(temp.val);
+			}
+			temp = temp.next;
+		}
+		return ls;
+	}
+	public static int largestSum(int[]a) {
+		int sofar = Integer.MIN_VALUE;
+		int i = 0;
+		int now = 0;
+		while(i < a.length) {
+			now += a[i];
+			sofar = Math.max(sofar, now);
+			if(now < 0)
+				now = 0;
+			i ++;
+		}
+		return sofar;
+	}
+	public static int lengthOfLIS(int[] nums) {
+        int memo[][] = new int[nums.length][nums.length];
+        for (int[] l : memo) {
+            Arrays.fill(l, -1);
+        }
+        return lengthofLIS(nums, -1, 0, memo);
+    }
+    public static int lengthofLIS(int[] nums, int previndex, int curpos, int[][] memo) {
+        if (curpos == nums.length) {
+            return 0;
+        }
+        if (memo[previndex + 1][curpos] >= 0) {
+            return memo[previndex + 1][curpos];
+        }
+        int taken = 0;
+        if (previndex < 0 || nums[curpos] > nums[previndex]) {
+            taken = 1 + lengthofLIS(nums, curpos, curpos + 1, memo);
+        }
+
+        int nottaken = lengthofLIS(nums, previndex, curpos + 1, memo);
+        System.out.println(previndex + " , " + curpos);
+        memo[previndex + 1][curpos] = Math.max(taken, nottaken);
+        for(int i = 0; i < memo.length; i ++) {
+        	for(int j = 0; j < memo[i].length; j ++)
+        		System.out.printf("%4d",memo[i][j]);
+        	System.out.println("");
+        }
+        System.out.println("done");
+        return memo[previndex + 1][curpos];
+    }
+    
+	public static int[] longestFindArr(int[]a) {
+		if(a.length == 0)
+			return null;
+		int[]arr = new int [a.length];
+		int[]pos = new int [a.length];
+		pos[0] = -1;
+		Arrays.fill(arr, 1);
+		for(int i = 1; i < a.length; i ++) 
+			for(int j = 0; j < i; j ++) 
+				if(a[j]<a[i]) 
+					if(arr[i] <= arr[j]) { 
+						arr[i] = arr[j]+1;
+						pos[i] = j;
+				    }
+		
+		int max = arr[0];
+		int index = 0;
+		for(int i = 1; i < arr.length; i ++) {
+			if(arr[i] > max) {
+				max = arr[i];
+				index = i;
+			}
+		}
+		var ls = new ArrayList<Integer>();
+		
+		while(index != -1) {
+			ls.add(a[index]);
+			index = pos[index];
+		}
+		Collections.reverse(ls);
+		
+		int []result = ls.stream().mapToInt(i->i).toArray();
+		return result;
+	}
+	public static int longestLoop(int[]a) {
+		if(a.length == 0)
+			return 0;
+		int[]arr = new int [a.length];
+		Arrays.fill(arr, 1);
+		for(int i = 1; i < a.length; i ++) 
+			for(int j = 0; j < i; j ++) 
+				if(a[j]<a[i]) 
+					if(arr[i] <= arr[j]) 
+						arr[i] = arr[j]+1;
+		
+		Arrays.sort(arr);
+		return arr[arr.length-1];
+	}
+	public static int longestSubRec(int[]a) {
+		return findLongest(a,Integer.MIN_VALUE,0);
+	}
+	public static int findLongest(int[]a, int pre, int curr) {
+		if(curr == a.length)
+			return 0;
+		int take = 0;
+		if(a[curr]>pre) {
+			take = 1+findLongest(a,a[curr],curr+1);
+		}
+		int notake = findLongest(a,pre,curr+1);
+		return Math.max(take, notake);
+	}
 	public static TreeNode merge(TreeNode t1, TreeNode t2) {
 		if(t1 == null)
 			return t2;
