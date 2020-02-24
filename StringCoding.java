@@ -4,25 +4,78 @@ import java.util.stream.*;
 public class StringCoding {
 
 	public static void main(String[] args) {
-		node head = new node(3);
-		node n1 = new node(0);
-		node n3 = new node(1);
-		node n4 = new node(2);
-		node n5 = new node(4);
-		node n6 = new node(4);
-		node n7 = new node(6);
-		node n8 = new node(6);
-		head.next = n1;
-		n1.next = n3;
-		n3.next = n4;
-		n4.next = n5;
-		n5.next = n6;
-		n6.next = n7;
-		n7.next = n8;
+//		node head = new node(3);
+//		node n1 = new node(0);
+//		node n3 = new node(1);
+//		node n4 = new node(2);
+//		node n5 = new node(4);
+//		node n6 = new node(4);
+//		node n7 = new node(6);
+//		node n8 = new node(6);
+//		head.next = n1;
+//		n1.next = n3;
+//		n3.next = n4;
+//		n4.next = n5;
+//		n5.next = n6;
+//		n6.next = n7;
+//		n7.next = n8;
+//		
+//		System.out.println(dumpNodeValue(head));
+//		var map = new HashMap<Integer,Integer>();
+//		char c = 'c';
+//		int myint = c;
+//		System.out.println(myint);
+//		map.put(1, 2);
+//		map.put(1, 20);
+//		map.put(11, 12);
+//		map.put(10, 3);
+//		map.put(3, 2);
+//		map.put(3, 2);
+//		System.out.println(map);
 		
-		System.out.println(dumpNodeValue(head));
+		//compare(a,b);
 		
-		
+		String str = "dajiif";
+		char[] c = str.toCharArray();
+		Arrays.sort(c);
+		System.out.println(c);
+		int[] a = {2,3,4,2};
+		System.out.println(a);
+	}
+	
+	public static void compareMapwithKey(HashMap<Integer,Integer>m1) {
+		var q = new PriorityQueue<Integer>();
+		for(int key : m1.keySet()) {
+			q.add(key);
+		}
+		while(!q.isEmpty()) {
+			System.out.println(q.poll() + ", ");
+		}
+
+	}
+	public static void compareMapwithValue(HashMap<Integer,Integer>m1) {
+		Comparator<Integer> comparator = (a,b) -> Integer.compare(m1.get(a), m1.get(b));
+		var q = new PriorityQueue<Integer>(comparator);
+		for(int key : m1.keySet()) {
+			q.add(key);
+		}
+		while(!q.isEmpty()) {
+			System.out.println(q.poll() + ", ");
+		}
+
+	}
+	public static void compare(int[]nums1, int[]nums2) {
+	        Comparator<int[]> comparator = (a, b) -> Integer.compare(nums1[a[0]] + nums2[a[1]], nums1[b[0]] + nums2[b[1]]);
+	        PriorityQueue<int[]> pq = new PriorityQueue<>(comparator);
+	        for(int i = 0; i < nums1.length; i ++) {
+	        	for(int j = 0; j < nums2.length; j ++) {
+	        		pq.add(new int[] {i,j});
+	        	}
+	        }
+	        while(!pq.isEmpty()) {
+	        	var temp = pq.poll();
+	        	System.out.println(nums1[temp[0]]+ "," + nums2[temp[1]]);
+	        }
 	}
 	public static ArrayList<Integer> dumpNodeValue(node head) {
 		var temp = head;
