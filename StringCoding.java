@@ -34,15 +34,80 @@ public class StringCoding {
 //		System.out.println(map);
 		
 		//compare(a,b);
+
 		
-		String str = "dajiif";
-		char[] c = str.toCharArray();
-		Arrays.sort(c);
-		System.out.println(c);
-		int[] a = {2,3,4,2};
-		System.out.println(a);
+	
+	}
+	//assume array a is sorted in ascending order and might has been rotated 
+	public static int findMinNum(int[] a) {
+		//if has not been rotated
+		if(a[0] <= a[a.length-1])
+			return a[0];
+		int left = 0;
+		int right = a.length-1;
+		while(left < right) {
+			int mid = left + (right-left)/2;
+			if(a[mid] > a[mid+1])
+				return a[mid+1];
+			if(a[mid-1] > a[mid])
+				return a[mid];
+			else {
+				if(a[0] > a[mid])
+					right = mid-1;
+				else
+					left = mid+1;
+			}
+		}
+		return -1;
 	}
 	
+	public static int[] intersectionOptimize(int[] nums1, int[] nums2) {
+        Arrays.sort(nums1);
+        Arrays.sort(nums2);
+        int[] result = new int[Math.max(nums1.length,nums2.length)];
+        int index = 0;
+        int i = 0, j = 0;
+        while(i < nums1.length && j < nums2.length){
+            int l1 = nums1[i];
+            int l2 = nums2[j];
+            if(l1 == l2){
+                result[index++] = l1;
+                while(i < nums1.length && l1 == nums1[i]) i++;
+                while(j < nums2.length && l2 == nums2[j]) j ++;
+                continue;
+            }
+            if(l1 < l2) while( i < nums1.length && l1 == nums1[i]) i++;
+            else  while(j < nums2.length && l2 == nums2[j]) j++;
+        }
+        return Arrays.copyOf(result, index);
+    }
+	  public static int[] intersection(int[] nums1, int[] nums2) {
+	        var set = new HashSet<Integer>();
+	        for(int i : nums1)
+	            set.add(i);
+	        var newSet = new HashSet<Integer>();
+	        for(int i : nums2)
+	            if(set.contains(i))
+	                newSet.add(i);
+
+	        int[] result = new int[newSet.size()];
+	        int index = 0;
+	        for(int i : newSet)
+	            result[index++] = i;
+	        return result;
+	    }
+	 public static List<List<String>> groupAnagrams(String[] strs) {
+	        var map = new HashMap<String,List<String>>();
+	        for(String s : strs){
+	            char[] c = s.toCharArray();
+	            Arrays.sort(c);
+	            String key = String.valueOf(c);
+	            if(!map.containsKey(key))
+	                map.put(key, new ArrayList<String>());
+	            map.get(key).add(s);
+	        }
+	        return new ArrayList(map.values());
+	  }
 	public static void compareMapwithKey(HashMap<Integer,Integer>m1) {
 		var q = new PriorityQueue<Integer>();
 		for(int key : m1.keySet()) {
