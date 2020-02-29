@@ -34,9 +34,113 @@ public class StringCoding {
 //		System.out.println(map);
 		
 		//compare(a,b);
-
+		int[][]a = {{1,1,0,0,0},{1,1,0,0,0},{0,0,0,1,1},{0,0,0,1,1}};
+		print(a);
+		System.out.println("______________");
+		System.out.println(maxAreaOfIsland(a));
 		
+	}
 	
+	public static int uniquePaths(int m, int n) {
+        int[][] map = new int [n][m];
+        return findPath(m,n,map);
+    }
+    public static int findPath(int m, int n, int[][]map){
+         for(int i = 0; i < n; i ++){
+             map[i][0] = 1;
+         }
+         for(int j = 0; j < m; j ++){
+             map[0][j] = 1;
+         }
+        for(int i = 1; i < n; i ++){
+            for(int j = 1; j < m; j ++){
+                map[i][j] = map[i-1][j] + map[i][j-1];
+            }
+        }
+        return map[n-1][m-1];
+    }
+	
+	public static int maxAreaOfIsland(int[][] grid) {
+        boolean[][] visited = new boolean[grid.length][grid[0].length];
+        int r = grid.length;
+        int c = grid[0].length;
+        int area = 0;
+        for(int i = 0; i < r; i ++){
+            for(int j = 0; j < c; j ++){
+                if(!visited[i][j] && grid[i][j] == 1){
+                    int now = findArea(grid,i,j,visited,r,c);
+                    area = Math.max(area, now);
+                }
+            }
+        }
+        return area;
+    }
+    public static int findArea(int[][] grid, int i, int j, boolean[][] visited, int r, int c){    
+         if(i < 0 || i >= r || j < 0 || j >= c || visited[i][j] || grid[i][j] == 0)
+             return 0;
+         visited[i][j] = true;
+         return 1+findArea(grid,i-1,j,visited,r,c)+findArea(grid,i+1,j,visited,r,c)+ findArea(grid,i,j-1,visited,r,c)+findArea(grid,i,j+1,visited,r,c);
+         
+    }
+	public static int search(int[] nums, int target) {
+        if(nums == null || nums.length == 0) return -1;
+        int l = 0;
+        int r = nums.length-1;
+        
+        while(l <= r){
+            int mid = (l+r)/2;
+           
+            System.out.println("mid: " + mid + " l: " + l + " r: " + r );
+            if(nums[mid] == target)
+                return mid;
+            if(nums[mid] < nums[r]){
+                if(target > nums[mid] && target < nums[r]) l = mid+1;
+                else r = mid-1;
+            }else{
+                if(target > nums[l] && target < nums[mid]) r = mid-1;
+                else    l = mid+1;
+            }
+            
+        }
+        return -1;
+    }
+	public static int subarraySum(int[] nums, int k) {
+		int count = 0, sum = 0;
+        HashMap < Integer, Integer > map = new HashMap < > ();
+        map.put(0, 1);
+        for (int i = 0; i < nums.length; i++) {
+            sum += nums[i];
+            if (map.containsKey(sum - k)) {
+                count += map.get(sum - k);
+            }
+            map.put(sum, map.getOrDefault(sum, 0) + 1);
+            System.out.println(map);
+        }
+        return count;
+    }
+	
+	 public static int subArraySum(int[]nums, int k) {
+		 int c = 0;
+		 for(int i = 0; i < nums.length; i ++) {
+			 int total = nums[i];
+			 if(total == k)
+				 c ++;
+			 for(int j = i+1; j < nums.length; j ++) {
+				 total += nums[j];
+				 if(total == k)
+					 c++;
+			 }
+		 }
+		 return c;
+	 }
+	 public static int firstUniqChar1(String s) {
+	        if(s.length() == 1)
+	            return 0;
+	        for(int i = 0; i < s.length(); i ++)
+	            if(i != s.length()-1 && s.indexOf(s.charAt(i),(i+1)) == -1){
+	              return i;
+	            }
+	        return -1;
 	}
 	//assume array a is sorted in ascending order and might has been rotated 
 	public static int findMinNum(int[] a) {
@@ -477,8 +581,9 @@ public class StringCoding {
 	}
 	public static void print(int []a) {
 		System.out.print("[");
-		for(int i : a) {
-			System.out.print(i+ ",");
+		for(int i = 0; i < a.length; i ++) {
+			String k = i == a.length-1? a[i]+"" : a[i]+ ",";
+			System.out.print(k);
 		}
 		System.out.println("]");
 
@@ -519,6 +624,15 @@ public class StringCoding {
 			System.out.print("[");
 			for(int j = 0; j < a[0].length; j ++) {
 				System.out.print(a[i][j]+",");
+			}
+			System.out.println("],");
+		}
+	}
+	public static void print(boolean[][]a) {
+		for(int i = 0; i < a.length; i++) {
+			System.out.print("[");
+			for(int j = 0; j < a[0].length; j ++) {
+				System.out.printf("%s", a[i][j] ? "1 " : "0 ");		
 			}
 			System.out.println("],");
 		}
