@@ -34,13 +34,100 @@ public class StringCoding {
 //		System.out.println(map);
 		
 		//compare(a,b);
-		int[][]a = {{1,1,0,0,0},{1,1,0,0,0},{0,0,0,1,1},{0,0,0,1,1}};
+		int[] a = {1,2,3,4};
+		int[] b = a;
+		b[1] = 11;
 		print(a);
-		System.out.println("______________");
-		System.out.println(maxAreaOfIsland(a));
 		
 	}
-	
+	public static int rob(int[] nums) {
+        if (nums == null || nums.length == 0) return 0;
+        if (nums.length == 1) return nums[0];
+        return Math.max(rob(nums, 0, nums.length-2), rob(nums, 1, nums.length-1));
+    }
+    
+    private static int rob(int[] nums, int l, int r) {
+        if (r - l == 0) return nums[l];
+        int pre = nums[l], cur = Math.max(nums[l], nums[l+1]);
+        for (int i = l + 2; i <= r; ++i) {
+            int t = pre;
+            cur = Math.max(pre = cur, t+nums[i]);
+        }
+        return cur;
+    }
+	public static boolean isSubsequence(String s, String t) {
+		if(t.length()<s.length()) return false;
+	        int lastFoundIndex = 0;
+	        char[] charsS = s.toCharArray();
+	        for(int i=0; i<charsS.length; i++) {
+	            int currentCharIndex = t.indexOf(charsS[i],lastFoundIndex);
+	            if(currentCharIndex==-1){ //|| t.length()-currentCharIndex<charsS.length-i)  {
+	                return false;
+	            } else {
+	                lastFoundIndex = currentCharIndex + 1;
+	            }
+	        }
+	        return true;
+	 }
+	static boolean shouldSwap(char str[], int start, int curr) { 
+        for (int i = start; i < curr; i++) { 
+            if (str[i] == str[curr]) { 
+                return false; 
+            } 
+        } 
+        return true; 
+    } 
+  
+// Prints all distinct permutations in str[0..n-1]  
+    static void findPermutations(char str[], int index, int n) { 
+        if (index >= n) { 
+            //System.out.println(str); 
+            return; 
+        } 
+  
+        for (int i = index; i < n; i++) { 
+  
+            // Proceed further for str[i] only if it  
+            // doesn't match with any of the characters  
+            // after str[index]  
+            boolean check = shouldSwap(str, index, i); 
+            if (check) { 
+                swap(str, index, i); 
+                findPermutations(str, index + 1, n); 
+                swap(str, index, i); 
+            } 
+        } 
+    } 
+  
+    static void swap(char[] str, int i, int j) { 
+        char c = str[i]; 
+        System.out.println("swaping..." + str[i] + ", " + str[j]);
+        str[i] = str[j]; 
+        str[j] = c; 
+       
+    } 
+  
+	public static List<String> permutationsOfString(String a){
+		char c[] = a.toCharArray();
+		var ls = new ArrayList<String>();
+		for(int i = 0; i < c.length; i ++) {
+			for(int j = 0; j < c.length; j ++) {
+				if(shouldSwap(c[i],c[j])) {
+					var temp = c;
+					var swap = c[i];
+					temp[i] = c[j];
+					temp[j] = swap;
+					ls.add(new String(temp));
+				}
+			}
+		}
+		return ls;
+	}
+	public static boolean shouldSwap(char a, char b) {
+		if(a != b)
+			return true;
+		return false;
+	}
 	public static int uniquePaths(int m, int n) {
         int[][] map = new int [n][m];
         return findPath(m,n,map);
