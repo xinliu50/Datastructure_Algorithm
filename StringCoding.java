@@ -32,14 +32,20 @@ public class StringCoding {
 //		map.put(3, 2);
 //		map.put(3, 2);
 //		System.out.println(map);
-		
-		//compare(a,b);
-		int[] a = {1,2,3,4};
-		int[] b = a;
-		b[1] = 11;
-		print(a);
-		
+		int a = 10;
+		int b = -20;
+		System.out.println(11&2);
 	}
+	 public static int maxProfit(int prices[]) {
+	        int minprice = Integer.MAX_VALUE;
+	        int maxprofit = 0;
+	        for (int i = 0; i < prices.length; i++) {
+	            maxprofit = Math.max((prices[i] - minprice),maxprofit);
+	            minprice = Math.min(minprice,prices[i]);
+
+	        }
+	        return maxprofit;
+	    }
 	public static int rob(int[] nums) {
         if (nums == null || nums.length == 0) return 0;
         if (nums.length == 1) return nums[0];
