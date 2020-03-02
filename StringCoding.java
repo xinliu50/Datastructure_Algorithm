@@ -32,9 +32,136 @@ public class StringCoding {
 //		map.put(3, 2);
 //		map.put(3, 2);
 //		System.out.println(map);
-		int a = 10;
-		int b = -20;
-		System.out.println(11&2);
+		int[]a = {3,2,1,10,20,30,-100,2,2087,3489,-29883,299,122};
+		print(a);
+		selectionSort(a);
+		print(a);
+	}
+	public static void selectionSort(int[]a) {
+		for(int i = 0; i < a.length; i ++) {
+			int min = a[i];
+			int index = i;
+			for(int j = i+1; j < a.length; j ++) {
+				if(a[j] < min) {
+					min = a[j];
+					index = j;
+				}
+			}
+			if(index != i) {
+				a[index] = a[i];
+				a[i] = min;
+			}
+		}
+	}
+    public static void quickSort(int[]a, int start, int end) {
+    	  if(start >= end)
+    		  return;
+    	  int p = partition(a,start,end);
+    	  quickSort(a,start,p-1);
+    	  quickSort(a,p+1,end);
+    }
+    public static int partition(int[]a, int start, int end) {
+    	  int pivot = a[start];
+    	  int index = start;
+    	  for(int i = start+1; i <= end; i ++) {
+    		  if(a[i] <= pivot) {
+    			  index ++;
+    			  swap(a,index,i);
+    		  }
+    	  }
+    	  swap(a,index,start);
+    	  return index;
+    }
+   public static void swap(int []a, int i, int j) {
+    	  var temp = a[i];
+    	  a[i] = a[j];
+    	  a[j] = temp;
+    }
+
+	public static void insertionSort(int[] a) {
+		for(int i = 1; i < a.length; i ++) {
+			int key = a[i];
+			int j = i-1;
+			while(j >= 0 && a[j] > key) {
+				a[j+1] = a[j];
+				j --;
+			}
+			a[j+1] = key;
+		}
+	}
+	public static void bubbleSort(int[] a) {
+		for(int i = a.length-1; i >= 0; i --) {
+			for(int j = 1; j <= i; j ++) {
+				if(a[j] < a[j-1]) {
+					var temp = a[j];
+					a[j] = a[j-1];
+					a[j-1] = temp;
+				}
+			}
+		}
+	}
+	public static void bubbleSortOptimized(int[]a) {
+		for(int i = a.length-1; i >= 0; i --) {
+			boolean flag = false;
+			for(int j = 1; j <= i; j ++) {
+				if(a[j] < a[j-1]) {
+					var temp = a[j];
+					a[j] = a[j-1];
+					a[j-1] = temp;
+					flag = true;
+				}
+			}
+			if(!flag)
+				break;
+		}
+	}
+	public static int binarySearch(int[] a, int start, int end, int target) {
+		if(start > end)
+			return -1;
+		int mid = (start+end)/2;
+		if(a[mid] == target)
+			return mid;
+		if(a[mid] < target)
+			return binarySearch(a,mid+1, end, target);
+		return binarySearch(a,start,mid-1,target);
+	}
+	public static void mergeSort(int[]a,int start,int end) {
+		if(start >= end)
+			return;
+		int mid = (start+end)/2;
+		mergeSort(a,start,mid);
+		mergeSort(a,mid+1,end);
+		merge(a,start,mid,mid+1,end);
+	}
+	public static void merge(int[]a, int leftStart, int leftEnd, int rightStart, int rightEnd) {
+		int l = leftEnd-leftStart+1;
+		int r = rightEnd-rightStart+1;
+		int[]result = new int[l+r];
+		
+		int lIndex = 0, rIndex = 0, index = 0;
+		while(lIndex < l && rIndex < r) {
+			if(a[leftStart+lIndex] < a[rightStart+rIndex]) {
+				result[index++] = a[leftStart+lIndex];
+				lIndex ++;
+			}else {
+				result[index++] = a[rightStart+rIndex];
+				rIndex ++;
+			}
+		}
+		while(lIndex < l) {
+			result[index++] = a[leftStart+lIndex];
+			lIndex ++;
+		}
+		while(rIndex < r) {
+			result[index++] = a[rightStart+rIndex];
+			rIndex ++;
+		}
+		
+		index = 0;
+		while(index < result.length) {
+			a[leftStart+index] = result[index];
+			index++;
+		}
 	}
 	 public static int maxProfit(int prices[]) {
 	        int minprice = Integer.MAX_VALUE;
