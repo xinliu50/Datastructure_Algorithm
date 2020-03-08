@@ -31,12 +31,114 @@ public class StringCoding {
 //		map.put(10, 3);
 //		map.put(3, 2);
 //		map.put(3, 2);
-//		System.out.println(map);
-		int[]a = {3,2,1,10,20,30,-100,2,2087,3489,-29883,299,122};
-		print(a);
-		selectionSort(a);
-		print(a);
+//		
+		char[][] b = board();
+		System.out.println(numCap(b));
+		
+		
 	}
+	public static int numCap(char[][]b) {
+		int row = b.length;
+		int col = b[0].length;
+		int num =0;
+		for(int i = 0; i < b.length; i ++) {
+			for(int j = 0; j < b[i].length; j++) {
+				if(b[i][j] == 'R')
+					num = findCap(b,i,j,row,col);
+			}
+		}
+		return num;
+	}
+	public static int findCap(char[][]b, int i, int j, int row, int col) {
+		int tempi = i;
+		int tempj = j;
+		int up = 0, down = 0, left = 0, right = 0;
+		while(tempi >= 0) {
+			if(b[tempi][j] == 'B')
+				break;
+			if(b[tempi][j] == 'p') {
+				up = 1;
+				break;
+			}
+			tempi --;
+		}
+		tempi = i;
+		while(tempi <= row-1) {
+			if(b[tempi][j] == 'B')
+				break;
+			if(b[tempi][j] == 'p') {
+				down = 1;
+				break;
+			}
+			tempi ++;
+		}
+		while(tempj >= 0) {
+			if(b[i][tempj] == 'B')
+				break;
+			if(b[i][tempj] == 'p') {
+				left = 1;
+				break;
+			}
+			tempj --;
+		}
+		tempj = j;
+		while(tempj <= col-1) {
+			if(b[i][tempj] == 'B')
+				break;
+			if(b[i][tempj] == 'p') {
+				right = 1;
+				break;
+			}
+			tempj ++;
+		}
+		return left+up+right+down;
+	}
+	public static char[][] board(){
+		char[][] b = new char[4][4];
+		for(int i = 0; i < b.length; i ++) {
+			for(int j = 0; j < b[i].length; j ++) {
+				b[i][j] = '.';
+			}
+		}
+		b[1][1] = 'R';
+		b[1][3] = 'p';
+		b[1][0] = 'B';
+		return b;
+	}
+	
+	public static int gcd1(int x, int y) {
+		if(x%y == 0)
+			return y;
+		return gcd1(y,x%y);
+	}
+	public static int fibonacci(int a) {
+		if(a <= 2)
+			return 1;
+		return fibonacci(a-1) + fibonacci(a-2);
+	}
+	public static int fibonacciLoop(int a) {
+		int n = 1;
+		int k = 1;
+		int c = 0;
+		for(int i = 3; i <= a; i ++) {
+			c = n + k;
+			k = n;
+			n = c;
+		}
+		return n;
+	}
+	public static List<List<Integer>> subsets(int[] nums) {
+	       var result = new ArrayList<List<Integer>>();
+	       result.add(new ArrayList<Integer>());
+	       for(int num : nums){
+	          for(List<Integer> ls : result){
+	              var innerls = new ArrayList<Integer>(ls);
+	              innerls.add(num);
+	              result.add(innerls);
+	          }
+	       }
+	      return result;
+	  }
 	public static void selectionSort(int[]a) {
 		for(int i = 0; i < a.length; i ++) {
 			int min = a[i];
@@ -839,24 +941,7 @@ public class StringCoding {
 	        target[index] = max; // change the current one to the new max.
 	        return isPossible(target); //recursively call the function
 	    }
-	public static void print(int[][]a) {
-		for(int i = 0; i < a.length; i++) {
-			System.out.print("[");
-			for(int j = 0; j < a[0].length; j ++) {
-				System.out.print(a[i][j]+",");
-			}
-			System.out.println("],");
-		}
-	}
-	public static void print(boolean[][]a) {
-		for(int i = 0; i < a.length; i++) {
-			System.out.print("[");
-			for(int j = 0; j < a[0].length; j ++) {
-				System.out.printf("%s", a[i][j] ? "1 " : "0 ");		
-			}
-			System.out.println("],");
-		}
-	}
+	
 	public static void sort(int[][]a) {
 		Arrays.sort(a,(c,b) -> {
 			return c[1] == b[1] ? c[0] - b[0] : c[1] - b[1];
@@ -2277,6 +2362,34 @@ queries[i][j], words[i][j] are English lowercase letters.*/
 	          return (second != -1) && A.charAt(first) == B.charAt(second) &&
 	                  A.charAt(second) == B.charAt(first);
 	      }   
+	     
+	     public static void print(int[][]a) {
+	 		for(int i = 0; i < a.length; i++) {
+	 			System.out.print("[");
+	 			for(int j = 0; j < a[0].length; j ++) {
+	 				System.out.print(a[i][j]+",");
+	 			}
+	 			System.out.println("],");
+	 		}
+	 	}
+	 	public static void print(boolean[][]a) {
+	 		for(int i = 0; i < a.length; i++) {
+	 			System.out.print("[");
+	 			for(int j = 0; j < a[0].length; j ++) {
+	 				System.out.printf("%s", a[i][j] ? "1 " : "0 ");		
+	 			}
+	 			System.out.println("],");
+	 		}
+	 	}
+	 	public static void print(char[][]a) {
+	 		for(int i = 0; i < a.length; i ++) {
+	 			System.out.print("[");
+	 			for(int j = 0; j < a[0].length; j++) {
+	 				System.out.print( a[i][j] + " ");		
+	 			}
+	 			System.out.println("],");
+	 		}
+	 	}
 	     
 }
 class TreeNode {
