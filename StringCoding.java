@@ -32,11 +32,106 @@ public class StringCoding {
 //		map.put(3, 2);
 //		map.put(3, 2);
 //		
-		char[][] b = board();
-		System.out.println(numCap(b));
-		
-		
+		//char[][] b = board();
+//		System.out.println(numCap(b));
+		var set = new HashSet<Integer>();
+	
 	}
+	public static TreeNode buildTreeFromOrders(int[] preorder, int[] inorder) {
+		return helpBuild(preorder,0,preorder.length-1,inorder,0,inorder.length-1);
+	}
+	public static TreeNode helpBuild(int[]preorder,int l1, int r1, int[]inorder,int l2, int r2) {
+		if(l1<r2)
+			return null;
+		int index = 0;
+		for(int i = 0; i < inorder.length; i++) {
+			if(inorder[i] == preorder[l1]) {
+				index = i;
+				break;
+			}
+		}
+		TreeNode node = new TreeNode(preorder[l1]);
+		node.left = helpBuild(preorder,l1+1,index-l2+l1,inorder,l2,index-1);
+		node.right = helpBuild(preorder,index-l2+l1+1,r1,inorder,index+1,r2);
+		return node;
+	}
+	public static boolean isValidBST(TreeNode root) {
+        return help(root,null,null);
+    }
+    public static boolean help(TreeNode root, Integer lower, Integer upper){
+        if(root == null)return true;
+        if(lower != null && lower >= root.val) return false;
+        if(upper != null && upper <= root.val) return false;
+        return help(root.left,lower,root.val) && help(root.right,root.val,upper);
+    }
+	public static int rec(int n) {
+		if(n == 1)
+			return 1;
+		int left = rec(n-1);
+		System.out.println(left);
+		return 4;
+	}
+	public static List<Double> averageOfLevelsQueue(TreeNode root) {
+	       var list = new ArrayList<Double>();
+	        var queue = new LinkedList<TreeNode>();
+	        if(root == null)
+	            return list;
+	        queue.add(root);
+	        while(!queue.isEmpty()){
+	            double count = 0;
+	            double sum = 0;
+	            var tempQueue = new LinkedList<TreeNode>();
+	            while(!queue.isEmpty()){
+	                count ++;
+	                var temp = queue.remove();
+	                sum += temp.val;
+	                if(temp.left != null)
+	                    tempQueue.add(temp.left);
+	                if(temp.right != null)
+	                    tempQueue.add(temp.right);
+	            }
+	            queue = tempQueue;
+	            list.add(sum/count);
+	        }
+	        return list;
+	    }
+	   public static List<Double> averageOfLevels(TreeNode root) {
+	       var ls = new ArrayList<double[]>();
+	       var doublelist = new ArrayList<Double>();
+	       if(root == null)
+	           return doublelist;
+	        ls.add(new double[]{root.val,1});
+	        doWork(root,ls,1);
+	        for(double[] b : ls){
+	            System.out.println(b[0] + " ," + b[1]);
+	            doublelist.add(b[0]/b[1]);
+	        }
+	        return doublelist;
+	    }
+	    public static void doWork(TreeNode root, List<double[]> ls, int level){
+	        
+	        if(root == null || root.left == null && root.right == null)
+	            return;   
+	        double c = 0;
+	        double sum = 0;
+	        if(root.left != null){
+	            c++;
+	            sum += root.left.val;
+	        }
+	        if(root.right != null){
+	            c++;
+	            sum += root.right.val;
+	        }
+	        
+	        if(ls.size() <= level){
+	            ls.add(new double[]{sum,c});
+	        }else{
+	            ls.get(level)[0] += sum;
+	            ls.get(level)[1] += c;
+	        }
+	         doWork(root.left,ls,level+1);
+	         doWork(root.right,ls,level+1);
+	    }
 	public static int numCap(char[][]b) {
 		int row = b.length;
 		int col = b[0].length;
