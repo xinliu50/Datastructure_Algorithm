@@ -34,9 +34,41 @@ public class StringCoding {
 //		
 		//char[][] b = board();
 //		System.out.println(numCap(b));
-		var set = new HashSet<Integer>();
-	
+		
+	    System.out.println(isIsomorphic("bar","foo"));
 	}
+	
+	 public static boolean isIsomorphic(String s, String t) {
+         Map m = new HashMap();
+        for (Integer i=0; i<s.length(); ++i){
+            if (m.put(s.charAt(i), i) != m.put(t.charAt(i)+ "", i))
+                return false;
+        }
+        return true;
+    }
+	public static void nextPermutation(int[] nums) {
+		int i = nums.length-2;
+		while(i >= 0 && nums[i+1] < nums[i]) {
+			i--;
+		}
+		if(i>= 0) {
+			int j = nums.length-2;
+			while(j >= 0 && nums[j] <= nums[i])
+				j--;
+			if(j >= 0) {
+				swap(nums,i,j);
+			}
+			int k = nums.length;
+			i ++;
+			while(i < k) {
+				swap(nums,i,k);
+				i++;
+				k--;
+			}
+		}
+		
+	}
+
 	public static TreeNode buildTreeFromOrders(int[] preorder, int[] inorder) {
 		return helpBuild(preorder,0,preorder.length-1,inorder,0,inorder.length-1);
 	}
